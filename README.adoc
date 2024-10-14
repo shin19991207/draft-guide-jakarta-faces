@@ -1,0 +1,264 @@
+//  Copyright (c) 2022, 2023 IBM Corporation and others.
+// Licensed under Creative Commons Attribution-NoDerivatives
+// 4.0 International (CC BY-ND 4.0)
+//   https://creativecommons.org/licenses/by-nd/4.0/
+//
+// Contributors:
+//     IBM Corporation
+//
+:projectid: jakarta-faces
+:page-layout: guide-multipane
+:page-duration: 25 minutes
+:page-releasedate: 2024-12-07
+:page-essential: false
+:page-description: Learn how to build a dynamic web application using Jakarta Faces for the user interface, CDI for managing beans, and Jakarta Expression Language for binding and handling data.
+:guide-author: Open Liberty
+:page-tags: ['Jakarta EE']
+:page-related-guides: ['grpc-intro']
+:page-permalink: /guides/{projectid}
+:imagesdir: /img/guide/{projectid}
+:page-seo-title: Building a dynamic web application using Jakarta Faces, CDI, and Jakarta Expression Language
+:page-seo-description: A getting started tutorial on how to build a dynamic web application using Jakarta Faces for the user interface, CDI for bean management, and Jakarta Expression Language for data binding and handling in Java.
+:common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
+:source-highlighter: prettify
+= Building a dynamic web application using Jakarta Faces
+
+[.hidden]
+NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
+
+Learn how to build a dynamic web application using Jakarta Faces, CDI, and Jakarta Expression Language.
+
+// =================================================================================================
+//  What you'll learn
+// =================================================================================================
+
+== What you'll learn
+
+// TODO
+// Jakarta Faces is a component-based framework for building user interfaces (UI) for Jakarta EE web applications. It simplifies UI development by providing a set of reusable UI components, event handling, and seamless integration with backend logic using Contexts and Dependency Injection (CDI) and Jakarta Expression Language (EL).
+
+// https://jakarta.ee/specifications/expression-language/[Jakarta Expression Language (EL)^] enables the binding of UI components to backend data models, allowing for dynamic data presentation without extensive Java code in the pages. EL expressions facilitate easy access to backend bean properties and methods directly from the UI components.
+
+// In this guide, you'll build a dynamic system monitoring application that displays real-time system load and memory usage data. The application consists of a Jakarta Faces page that presents the data in a table and a CDI-managed bean that retrieves the system data from the server.
+
+// You'll learn how to use the https://jakarta.ee/specifications/faces/[Jakarta Faces API^] to build the user interface and integrate it with backend logic using https://jakarta.ee/specifications/cdi/[Contexts and Dependency Injection (CDI)^]. You'll also learn how to bind UI components to backend data using Jakarta Expression Language.
+
+// =================================================================================================
+// Getting started
+// =================================================================================================
+[role='command']
+include::{common-includes}/gitclone.adoc[]
+
+=== Try what you'll build
+
+The `finish` directory in the root of this guide contains the finished application. Give it a try before you proceed. 
+
+To try out the application, first go to the `finish` directory and run Maven with the `liberty:run` goal to build the application and deploy it to Open Liberty:
+
+[role='command']
+```
+cd finish
+mvn liberty:run
+```
+
+After you see the following message, your Liberty instance is ready.
+
+[source, role="no_copy"]
+----
+The defaultServer server is ready to run a smarter planet.
+----
+
+Check out the web application at http://localhost:9080/index.xhtml. You can click on the refresh button to update and display the latest system load data in the table.
+
+After you are finished checking out the application, stop the Liberty instance by pressing `CTRL+C` in the command-line session where you ran Liberty. Alternatively, you can run the `liberty:stop` goal from the `finish` directory in another shell session:
+
+[role='command']
+----
+mvn liberty:stop
+----
+
+// =================================================================================================
+// Creating a static Jakarta Faces page
+// =================================================================================================
+== Creating a static Jakarta Faces page
+
+Start by creating a static Jakarta Faces page that displays an empty table for system load data, which serves as the starting point for your application.
+
+Navigate to the `start` directory to begin.
+
+When you run Open Liberty in https://openliberty.io/docs/latest/development-mode.html[dev mode^], dev mode listens for file changes and automatically recompiles and deploys your updates whenever you save a new change. Run the following goal to start Open Liberty in dev mode:
+
+[role='command']
+```
+mvn liberty:dev
+```
+
+After you see the following message, your Liberty instance is ready in dev mode:
+
+[source, role="no_copy"]
+----
+**************************************************
+*     Liberty is running in dev mode.
+----
+
+Dev mode holds your command-line session to listen for file changes. Open another command-line session to continue, or open the project in your editor.
+
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the index.xhtml file.#
+`src/main/webapp/index.xhtml`
+----
+
+index.xhtml
+[source, xhtml, linenums, role='code_column']
+----
+include::staging/index.xhtml[]
+----
+
+footer.xhtml
+[source, xhtml, linenums, role='code_column']
+----
+include::finish/src/main/webapp/WEB-INF/includes/footer.xhtml[]
+----
+
+In the [hotspot file=0]`index.xhtml` file, the [hotspot=xmlns file=0]`xmlns` attributes define the XML namespaces for various Jakarta Faces tag libraries. These namespaces allow the page to use Jakarta Faces tags for templating, creating UI components, and enabling core functionality like form submissions and data binding. For more information on the various tag libraries and their roles in Jakarta Faces, refer to the https://jakarta.ee/learn/docs/jakartaee-tutorial/current/web/faces-facelets/faces-facelets.html#_tag_libraries_supported_by_facelets[Jakarta Faces Tag Libraries Documentation^].
+
+The [hotspot file=0]`index.xhtml` file combines standard HTML elements with Jakarta Faces components, enabling both static layout and dynamic functionality. Jakarta Faces tags, like [hotspot=outputStylesheet file=0]`<h:outputStylesheet>` and [hotspot=uiIncludeFooter file=0]`<ui:include>`, manage UI components, resource inclusion, and data binding, offering additional features beyond standard HTML; while standard elements like `<div>` and `<section>` structure the page's layout. The [hotspot=outputStylesheet file=0]`<h:outputStylesheet>` includes a CSS file to style the page. The [hotspot=uiIncludeFooter file=0]`<ui:include>` tag incorporates reusable components, such as the provided [hotspot file=1]`footer.xhtml` file, to streamline maintenance and reuse across multiple pages. 
+
+At this point, the page defines a table that has no data entries. We'll add dynamic content in the following steps.
+
+// =================================================================================================
+// Mapping the Faces Servlet in `web.xml`
+// =================================================================================================
+== Mapping the Faces Servlet in `web.xml`
+
+Before you can access the Jakarta Faces page, you need to configure the Faces servlet in your application. This servlet handles all requests for `.xhtml` pages and processes them using Jakarta Faces.
+
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the web.xml file.#
+`src/main/webapp/WEB-INF/web.xml`
+----
+
+web.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/src/main/webapp/WEB-INF/web.xml[]
+----
+
+The [hotspot=servlet file=0]`<servlet>` element defines the Faces Servlet that is responsible for processing requests for Jakarta Faces pages. The [hotspot=load-on-startup file=0]`<load-on-startup>` element with a value of 1 specifies that the servlet should be loaded and initialized when the application starts. 
+
+The [hotspot=servlet-mapping file=0]`<servlet-mapping>` element specifies which URL patterns are routed to the Faces Servlet. In this case, all URLs ending with `.xhtml` are mapped to be processed by Jakarta Faces. This ensures that any request for a `.xhtml` page is handled by the Faces Servlet, which manages the lifecycle of Jakarta Faces components, processes the page, and renders the output. 
+
+By configuring both the servlet and the servlet mapping, you're ensuring that Jakarta Faces pages are properly processed and delivered in response to user requests.
+
+The [hotspot=project-stage file=0]`jakarta.faces.PROJECT_STAGE` context parameter determines the current stage of the application in its development lifecycle. When set to `Development`, Jakarta Faces provides additional debugging information and developer-friendly error messages.
+
+Because you are running Open Liberty in dev mode and have configured the Faces servlet, all the changes were automatically picked up. 
+
+Check out the application that you created at http://localhost:9080/index.xhtml. You should see the static page with the system loads table displaying only the headers and no data.
+
+// =================================================================================================
+// Implementing the backend logic with dependency injection
+// =================================================================================================
+== Implementing the backend logic with dependency injection
+
+To provide system data to your application, you'll create a CDI-managed bean that retrieves system load and memory usage information. This bean will be accessible from the Jakarta Faces page and provide the data to display.
+
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the SystemLoadBean class.#
+`src/main/java/io/openliberty/guides/application/SystemLoadBean.java`
+----
+
+SystemLoadBean.java
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/java/io/openliberty/guides/application/SystemLoadBean.java[]
+----
+
+Annotate the [hotspot file=0]`SystemLoadBean` class with a [hotspot=namedAnnotation file=0]`@Named` annotation to make it accessible in the Jakarta Faces pages under the name [hotspot=namedAnnotation file=0]`systemLoadBean`. Because the [hotspot=systemLoadBean file=0]`SystemLoadBean` bean is a CDI managed bean, a scope is necessary. An application scope is used in this example. To learn more about CDI, see https://openliberty.io/guides/cdi-intro.html[Injecting dependencies into microservices^].
+
+The [hotspot=postConstruct file=0]`@PostConstruct` annotation ensures the [hotspot=init file=0]`init()` method runs after the [hotspot=systemLoadBean file=0]`SystemLoadBean` is initialized and denpendencies are injected. The [hotspot=init file=0]`init()` method sets up any required resources for the bean's lifecyccle.
+
+The [hotspot=fetchSystemLoadMethod file=0]`fetchSystemLoad()` method retrieves the current system load and memory usage, then updates the list of system load data.
+
+The [hotspot=getSystemLoads file=0]`getSystemLoads()` method is a getter method for accessing the list of system load data from the Jakarta Faces page.
+
+Create the `SystemLoadData` class to represent each entry of system data.
+
+[role="code_command hotspot file=1", subs="quotes"]
+----
+#Create the SystemLoadData class.#
+`src/main/java/io/openliberty/guides/application/SystemLoadData.java`
+----
+
+// File 1
+SystemLoadData.java
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/java/io/openliberty/guides/application/SystemLoadData.java[]
+----
+
+The `SystemLoadData` class is a Plain Old Java Object (POJO) that represents a single system data entry. It contains the time, system load average, and memory usage data. The various methods within this class allow the viewing or editing the properties of each system in the system load bean.
+
+// =================================================================================================
+// Binding data to the UI with Expression Language
+// =================================================================================================
+== Binding data to the UI with Expression Language
+
+Now that you have the backend logic implemented with CDI, you'll update the Jakarta Faces page to display the dynamic system load data by binding the UI components to the backend data using Jakarta Expression Language.
+
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Update the index.xhtml file.#
+`src/main/webapp/index.xhtml`
+----
+
+index.xhtml
+[source, xhtml, linenums, role='code_column']
+----
+include::finish/src/main/webapp/index.xhtml[]
+----
+
+// file 1
+SystemLoadBean.java
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/main/java/io/openliberty/guides/application/SystemLoadBean.java[]
+----
+
+The [hotspot file=0]`index.html` uses a [hotspot=commandButton file=0]`<h:commandButton>` tag to create the refresh button, where the action [hotspot=commandButtonAction file=0]`#{systemLoadBean.fetchSystemLoad}` invokes the [hotspot=fetchSystemLoadMethod file=1]`fetchSystemLoad()` method using Jakarta Expression Language (EL) when clicked. This EL expression references the [hotspot=namedAnnotation file=1]`systemLoadBean` managed bean, triggering the method to update the system load data. The [hotspot=ajaxTag file=0]`<f:ajax>` tag ensures that the [hotspot=systemLoadForm file=0]`systemLoadForm` component is re-rendered without a full page reload.
+
+The [hotspot=systemLoadsTable file=0]`systemLoadsTable` table is populated using the [hotspot=uiRepeat file=0]`<ui:repeat>` tag, which iterates over the list of system load data from the [hotspot=namedAnnotation file=1]`systemLoadBean`. The EL expression [hotspot=dataBind file=0]`#{systemLoadBean.systemLoads}` binds the data from the managed bean to the UI components, and initializes the `systemLoadBean` if it hasn't been created yet. For each entry, the `time`, `loadAverage`, and `memoryUsage` fields are displayed using [hotspot=outputText1 hotspot=outputText2 hotspot=outputText3 file=0]`<h:outputText>`, while [hotspot=convertNumber1 hotspot=convertNumber2 file=0]`<f:convertNumber>` formats numeric values to two decimal places.
+
+// =================================================================================================
+// Running the application
+// =================================================================================================
+
+== Running the application
+
+server.xml
+[source, xml, linenums, role='code_column']
+----
+include::finish/src/main/liberty/config/server.xml[]
+----
+
+The required [hotspot=faces file=0]`faces`, [hotspot=expressionLanguage file=0]`expressionLanguage`, and [hotspot=cdi file=0]`cdi` features have been enabled for you in the Liberty `server.xml` configuration file.
+
+Because you started the Open Liberty in dev mode at the beginning of the guide, so all the changes were automatically picked up.
+
+Navigate to the http://localhost:9080/index.xhtml to view your web application.
+
+Click on the refresh button to trigger an update on the system loads table.
+
+// =================================================================================================
+// Great work! You're done!
+// =================================================================================================
+
+== Great work! You're done!
+
+You just built a dynamic web application on Open Liberty by using Jakarta Faces for the user interface, CDI for managing beans, and Jakarta Expression Language for binding and handling data.
+
+include::{common-includes}/attribution.adoc[subs="attributes"]
+

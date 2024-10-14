@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <meta charset="UTF-8" />
+        <title>Open Liberty System Load</title>
+        <!-- tag::outputStylesheet[] -->
+        <h:outputStylesheet library="css" name="styles.css" />
+        <!-- end::outputStylesheet[] -->
+        <link href="favicon.ico" rel="icon" />
+        <link href="favicon.ico" rel="shortcut icon" />
+    </h:head>
+    <h:body>
+        <section id="appIntro">
+            <div id="titleSection">
+                <h1 id="appTitle">Open Liberty System Load</h1>
+                <div class="line"></div>
+                <div class="headerImage"></div>
+            </div>
+
+            <div class="msSection" id="systemLoads">
+                <div class="headerRow">
+                    <div class="headerIcon">
+                        <img src="#{resource['img/sysProps.svg']}" />
+                    </div>
+                    <div class="headerTitleWithButton" id="sysPropTitle">
+                        <h2>System Loads</h2>
+                    </div>
+                </div>
+
+                <div class="sectionContent">
+                    <table id="systemLoadsTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>System Load</th>
+                                <th>Memory Usage (%)</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <!-- tag::uiIncludeFooter[] -->
+        <ui:include src="/WEB-INF/includes/footer.xhtml" />
+        <!-- end::uiIncludeFooter[] -->
+    </h:body>
+</html>
