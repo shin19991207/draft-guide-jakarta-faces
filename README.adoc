@@ -149,7 +149,7 @@ The [hotspot=servlet-mapping file=0]`<servlet-mapping>` element specifies which 
 
 By configuring both the servlet and the servlet mapping, you're ensuring that Jakarta Faces pages are properly processed and delivered in response to user requests.
 
-The [hotspot=project-stage file=0]`jakarta.faces.PROJECT_STAGE` context parameter determines the current stage of the application in its development lifecycle. When set to `Development`, Jakarta Faces provides additional debugging information and developer-friendly error messages.
+The [hotspot=project-stage file=0]`jakarta.faces.PROJECT_STAGE` context parameter determines the current stage of the application in its development lifecycle. When set to [hotspot=project-stage-dev file=0]`Development`, Jakarta Faces provides additional debugging information and developer-friendly error messages.
 
 Because you are running Open Liberty in dev mode and have configured the Faces servlet, all the changes were automatically picked up. 
 
@@ -197,12 +197,12 @@ SystemLoadData.java
 include::finish/src/main/java/io/openliberty/guides/application/SystemLoadData.java[]
 ----
 
-The `SystemLoadData` class is a Plain Old Java Object (POJO) that represents a single system data entry. It contains the time, system load average, and memory usage data. The various methods within this class allow the viewing or editing the properties of each system in the system load bean.
+The [hotspot file=1]`SystemLoadData` class is a Plain Old Java Object (POJO) that represents a single system data entry. It contains the time, system load average, and memory usage data. The various methods within this class allow the viewing or editing the properties of each system in the system load bean.
 
 // =================================================================================================
-// Binding data to the UI with Expression Language
+// Binding data to the UI with expression language
 // =================================================================================================
-== Binding data to the UI with Expression Language
+== Binding data to the UI with expression language
 
 Now that you have the backend logic implemented with CDI, you'll update the Jakarta Faces page to display the dynamic system load data by binding the UI components to the backend data using Jakarta Expression Language.
 

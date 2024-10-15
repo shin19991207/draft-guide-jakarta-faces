@@ -8,8 +8,12 @@
     <!-- An optional parameter that makes troubleshooting development stage errors much easier. -->
     <!-- You should remove this context parameter before deploying to production or override via Server's JNDI config! -->
     <context-param>
+        <!-- tag::project-stage[] -->
         <param-name>jakarta.faces.PROJECT_STAGE</param-name>
+        <!-- end::project-stage[] -->
+        <!-- tag::project-stage-dev[] -->
         <param-value>Development</param-value>
+        <!-- end::project-stage-dev[] -->
     </context-param>
 
     <!-- Faces Servlet Configuration -->
