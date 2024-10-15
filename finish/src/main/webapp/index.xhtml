@@ -68,7 +68,7 @@
                                             <!-- tag::outputText2[] -->
                                             <h:outputText value="#{data.loadAverage == null ? '-' : data.loadAverage}">
                                                 <!-- tag::convertNumber1[] -->
-                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                                <f:convertNumber pattern="#0.00" />
                                                 <!-- end::convertNumber1[] -->
                                             </h:outputText>
                                             <!-- end::outputText2[] -->
@@ -77,7 +77,7 @@
                                             <!-- tag::outputText3[] -->
                                             <h:outputText value="#{data.memoryUsage == null ? '-' : data.memoryUsage}">
                                                 <!-- tag::convertNumber2[] -->
-                                                <f:convertNumber minFractionDigits="2" maxFractionDigits="2" />
+                                                <f:convertNumber pattern="#0.00" />
                                                 <!-- end::convertNumber2[] -->
                                             </h:outputText>
                                             <!-- tag::outputText3[] -->
