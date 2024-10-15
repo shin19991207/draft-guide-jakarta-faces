@@ -34,14 +34,11 @@ Learn how to build a dynamic web application using Jakarta Faces, CDI, and Jakar
 
 == What you'll learn
 
-// TODO
-// Jakarta Faces is a component-based framework for building user interfaces (UI) for Jakarta EE web applications. It simplifies UI development by providing a set of reusable UI components, event handling, and seamless integration with backend logic using Contexts and Dependency Injection (CDI) and Jakarta Expression Language (EL).
+You'll learn how to build a dynamic web application using Jakarta Faces for the user interface (UI), CDI for managing backend logic, and Jakarta Expression Language for data binding. 
 
-// https://jakarta.ee/specifications/expression-language/[Jakarta Expression Language (EL)^] enables the binding of UI components to backend data models, allowing for dynamic data presentation without extensive Java code in the pages. EL expressions facilitate easy access to backend bean properties and methods directly from the UI components.
+Jakarta Faces is a powerful framework for building web applications with reusable UI components. It provides an API for managing component state, handling events, server-side validation, page navigation, and supports internationalization. The framework also offers tag libraries for adding components and binding them to server-side objects, simplifying UI development. Contexts and Dependency Injection (CDI) provides a flexible way to manage the lifecycle of backend beans, allowing managed beans to be automatically created and injected when needed. Jakarta Expression Language (EL) allows data binding between the UI and the backend, enabling componenets to display dynamic data and respond to user actions.
 
-// In this guide, you'll build a dynamic system monitoring application that displays real-time system load and memory usage data. The application consists of a Jakarta Faces page that presents the data in a table and a CDI-managed bean that retrieves the system data from the server.
-
-// You'll learn how to use the https://jakarta.ee/specifications/faces/[Jakarta Faces API^] to build the user interface and integrate it with backend logic using https://jakarta.ee/specifications/cdi/[Contexts and Dependency Injection (CDI)^]. You'll also learn how to bind UI components to backend data using Jakarta Expression Language.
+The application you will build in this guide is a dynamic web application that displays system load data on demand. Using Jakarta Faces for the UI, you'll create a table to show the system's load and memory usage. You'll also learn how to use CDI to provide the system data from a managed bean, and to use Jakarta Expression Language to bind this data to the UI components.
 
 // =================================================================================================
 // Getting started
