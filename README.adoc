@@ -236,8 +236,6 @@ Click on the refresh button to trigger an update on the system loads table.
 // =================================================================================================
 == Testing the application
 
-automated tests are a much better approach because they are more reliable and trigger a failure if a breaking change is introduced.
-
 While you can manually verify the web application by visiting http://localhost:9080/index.xhtml, automated tests are a much better approach because they are more reliable and trigger a failure if a breaking change is introduced. You can write unit tests for your CDI bean to ensure that the basic operations you implemented function correctly.
 
 [role="code_command hotspot file=0", subs="quotes"]
