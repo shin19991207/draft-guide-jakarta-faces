@@ -67,6 +67,8 @@ The defaultServer server is ready to run a smarter planet.
 
 Check out the web application at http://localhost:9080/index.xhtml. You can click on the refresh button image:refresh.png[refresh icon, 16, 16] to update and display the latest system load data in the table.
 
+image:refresh.png[refresh icon]
+
 After you are finished checking out the application, stop the Liberty instance by pressing `CTRL+C` in the command-line session where you ran Liberty. Alternatively, you can run the `liberty:stop` goal from the `finish` directory in another shell session:
 
 [role='command']
