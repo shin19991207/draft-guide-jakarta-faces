@@ -19,7 +19,7 @@
 }
 
 body {
-    font-family: sans-serif;
+    font-family: BunueloSemiBold, sans-serif;
     font-size: 16px;
     color: #24243b;
     background-color: white;
@@ -109,14 +109,14 @@ a {
 .headerTitleWithButton {
     display: flex;
     align-items: center;
-    gap: 10px;                 /* Adds some space between the title and button */
+    gap: 10px;
     background-color: white;
     color: #5d6a8e;
     letter-spacing: 0;
     text-align: left;
     padding-left: 40px;
     padding-top: 10px;
-    width: calc(100% - 200px); /* 160 from icon, 40 from padding */
+    width: calc(100% - 200px);
 }
 
 .headerTitleWithButton > h2 {
@@ -129,16 +129,15 @@ a {
     background-image: url('#{resource["img/refresh.svg"]}');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 75%; /* Adjust to fit the SVG within the circle */
     background-color: transparent;
     border: none;
-    width: 48px; /* Match the SVG dimensions */
-    height: 48px; /* Match the SVG dimensions */
+    width: 60px;
+    height: 60px;
     cursor: pointer;
     padding: 0;
     margin: 0;
-    border-radius: 50%; /* Makes the button circular */
-    transition: background-color 0.2s;
+    border-radius: 50%;
+    transition: background-color 0.2s, width 0.2s, height 0.2s, border-radius 0.2s;
 }
 
 .refreshButton:hover {

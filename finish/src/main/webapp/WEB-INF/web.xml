@@ -4,9 +4,6 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
 
-    <!-- Set the project stage to "Development", "UnitTest", "SystemTest", or "Production". -->
-    <!-- An optional parameter that makes troubleshooting development stage errors much easier. -->
-    <!-- You should remove this context parameter before deploying to production or override via Server's JNDI config! -->
     <context-param>
         <!-- tag::project-stage[] -->
         <param-name>jakarta.faces.PROJECT_STAGE</param-name>

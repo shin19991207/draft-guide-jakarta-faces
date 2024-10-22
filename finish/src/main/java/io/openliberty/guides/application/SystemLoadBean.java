@@ -1,3 +1,14 @@
+// tag::copyright[]
+/*******************************************************************************
+ * Copyright (c) 2024 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License 2.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *******************************************************************************/
+// end::copyright[]
 package io.openliberty.guides.application;
 
 import java.lang.management.ManagementFactory;
@@ -6,11 +17,12 @@ import java.lang.management.OperatingSystemMXBean;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.Serializable;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
-import java.io.Serializable;
+import io.openliberty.guides.application.model.SystemLoadData;
 
 // tag::namedAnnotation[]
 @Named("systemLoadBean")
@@ -42,16 +54,13 @@ public class SystemLoadBean implements Serializable {
 
     // tag::fetchSystemLoadMethod[]
     public void fetchSystemLoad() {
+        String time = Calendar.getInstance().getTime().toString();
+
         double loadAverage = OS.getSystemLoadAverage();
 
-        // Get MemoryMXBean for memory usage data
         long heapMax = MEM.getHeapMemoryUsage().getMax();
         long heapUsed = MEM.getHeapMemoryUsage().getUsed();
-
-        // Calculate memory usage percentage
         double memoryUsage = heapUsed * 100.0 / heapMax;
-
-        String time = Calendar.getInstance().getTime().toString();
 
         SystemLoadData data = new SystemLoadData(time, loadAverage, memoryUsage);
 

@@ -11,14 +11,14 @@
 :page-duration: 25 minutes
 :page-releasedate: 2024-12-07
 :page-essential: false
-:page-description: Learn how to build a dynamic web application using Jakarta Faces for the user interface, CDI for managing beans, and Jakarta Expression Language for binding and handling data.
+:page-description: Learn how to build a dynamic web application using Jakarta Faces for the user interface, Jakarta Contexts and Dependency Injection for managing beans, and Jakarta Expression Language for binding and handling data.
 :guide-author: Open Liberty
 :page-tags: ['Jakarta EE']
 :page-related-guides: ['grpc-intro']
 :page-permalink: /guides/{projectid}
 :imagesdir: /img/guide/{projectid}
-:page-seo-title: Building a dynamic web application using Jakarta Faces, CDI, and Jakarta Expression Language
-:page-seo-description: A getting started tutorial on how to build a dynamic web application using Jakarta Faces for the user interface, CDI for bean management, and Jakarta Expression Language for data binding and handling in Java.
+:page-seo-title: Building a dynamic web application using Jakarta Faces, Jakarta Contexts and Dependency Injection, and Jakarta Expression Language
+:page-seo-description: A getting started tutorial on how to build a dynamic web application using Jakarta Faces for the user interface, Jakarta Contexts and Dependency Injection for bean management, and Jakarta Expression Language for data binding and handling in Java.
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
 = Building a dynamic web application using Jakarta Faces
@@ -26,7 +26,7 @@
 [.hidden]
 NOTE: This repository contains the guide documentation source. To view the guide in published form, view it on the https://openliberty.io/guides/{projectid}.html[Open Liberty website].
 
-Learn how to build a dynamic web application using Jakarta Faces, CDI, and Jakarta Expression Language.
+Learn how to build a dynamic web application using Jakarta Faces, Jakarta Contexts and Dependency Injection, and Jakarta Expression Language.
 
 // =================================================================================================
 //  What you'll learn
@@ -34,9 +34,9 @@ Learn how to build a dynamic web application using Jakarta Faces, CDI, and Jakar
 
 == What you'll learn
 
-You'll learn how to build a dynamic web application using Jakarta Faces for the user interface (UI), CDI for managing backend logic, and Jakarta Expression Language for data binding. 
+You'll learn how to build a dynamic web application using Jakarta Faces for the user interface (UI), Jakarta Contexts and Dependency Injection for managing backend logic, and Jakarta Expression Language for data binding. 
 
-Jakarta Faces is a powerful framework for building web applications with reusable UI components. It provides an API for managing component state, handling events, server-side validation, page navigation, and supports internationalization. The framework also offers tag libraries for adding components and binding them to server-side objects, simplifying UI development. Contexts and Dependency Injection (CDI) provides a flexible way to manage the lifecycle of backend beans, allowing managed beans to be automatically created and injected when needed. Jakarta Expression Language (EL) allows data binding between the UI and the backend, enabling componenets to display dynamic data and respond to user actions.
+Jakarta Faces is a powerful framework for building web applications with reusable UI components. It provides an API for managing component state, handling events, server-side validation, page navigation, and supports internationalization. The framework also offers tag libraries for adding components and binding them to server-side objects, simplifying UI development. Jakarta Contexts and Dependency Injection (CDI) provides a flexible way to manage the lifecycle of backend beans, allowing managed beans to be automatically created and injected when needed. Jakarta Expression Language (EL) allows data binding between the UI and the backend, enabling componenets to display dynamic data and respond to user actions.
 
 The application you will build in this guide is a dynamic web application that displays system load data on demand. Using Jakarta Faces for the UI, you'll create a table to show the system's load and memory usage. You'll also learn how to use CDI to provide the system data from a managed bean, and to use Jakarta Expression Language to bind this data to the UI components.
 
@@ -107,13 +107,13 @@ Dev mode holds your command-line session to listen for file changes. Open anothe
 ----
 
 index.xhtml
-[source, xhtml, linenums, role='code_column']
+[source, xhtml, linenums, role='code_column hide_tags=copyright']
 ----
 include::staging/index.xhtml[]
 ----
 
 footer.xhtml
-[source, xhtml, linenums, role='code_column']
+[source, xhtml, linenums, role='code_column hide_tags=copyright']
 ----
 include::finish/src/main/webapp/WEB-INF/includes/footer.xhtml[]
 ----
@@ -125,11 +125,11 @@ The [hotspot file=0]`index.xhtml` file combines standard HTML elements with Jaka
 At this point, the page defines a table that has no data entries. We'll add dynamic content in the following steps.
 
 // =================================================================================================
-// Mapping the Faces Servlet in `web.xml`
+// Mapping Faces Servlet
 // =================================================================================================
-== Mapping the Faces Servlet in `web.xml`
+== Mapping Faces Servlet
 
-Before you can access the Jakarta Faces page, you need to configure the Faces servlet in your application. This servlet handles all requests for `.xhtml` pages and processes them using Jakarta Faces.
+Before you can access the Jakarta Faces page, you need to configure the Faces Servlet in your application. This servlet handles all requests for `.xhtml` pages and processes them using Jakarta Faces.
 
 [role="code_command hotspot file=0", subs="quotes"]
 ----
@@ -151,14 +151,14 @@ By configuring both the servlet and the servlet mapping, you're ensuring that Ja
 
 The [hotspot=project-stage file=0]`jakarta.faces.PROJECT_STAGE` context parameter determines the current stage of the application in its development lifecycle. When set to [hotspot=project-stage-dev file=0]`Development`, Jakarta Faces provides additional debugging information and developer-friendly error messages.
 
-Because you are running Open Liberty in dev mode and have configured the Faces servlet, all the changes were automatically picked up. 
+Because you are running Open Liberty in dev mode and have configured the Faces Servlet, all the changes were automatically picked up. 
 
 Check out the application that you created at http://localhost:9080/index.xhtml. You should see the static page with the system loads table displaying only the headers and no data.
 
 // =================================================================================================
-// Implementing the backend logic with dependency injection
+// Implementing backend logic with dependency injection
 // =================================================================================================
-== Implementing the backend logic with dependency injection
+== Implementing backend logic with dependency injection
 
 To provide system data to your application, you'll create a CDI-managed bean that retrieves system load and memory usage information. This bean will be accessible from the Jakarta Faces page and provide the data to display.
 
@@ -174,7 +174,7 @@ SystemLoadBean.java
 include::finish/src/main/java/io/openliberty/guides/application/SystemLoadBean.java[]
 ----
 
-Annotate the [hotspot file=0]`SystemLoadBean` class with a [hotspot=namedAnnotation file=0]`@Named` annotation to make it accessible in the Jakarta Faces pages under the name [hotspot=namedAnnotation file=0]`systemLoadBean`. Because the [hotspot=systemLoadBean file=0]`SystemLoadBean` bean is a CDI managed bean, a scope is necessary. An application scope is used in this example. To learn more about CDI, see https://openliberty.io/guides/cdi-intro.html[Injecting dependencies into microservices^].
+Annotate the [hotspot file=0]`SystemLoadBean` class with a [hotspot=namedAnnotation file=0]`@Named` annotation to make it accessible in the Jakarta Faces pages under the name [hotspot=namedAnnotation file=0]`systemLoadBean`. Because the [hotspot=applicationScopedAnnotation file=0]`SystemLoadBean` bean is a CDI managed bean, a scope is necessary. An application scope is used in this example. To learn more about CDI, see https://openliberty.io/guides/cdi-intro.html[Injecting dependencies into microservices^].
 
 The [hotspot=postConstruct file=0]`@PostConstruct` annotation ensures the [hotspot=init file=0]`init()` method runs after the [hotspot=systemLoadBean file=0]`SystemLoadBean` is initialized and denpendencies are injected. The [hotspot=init file=0]`init()` method sets up any required resources for the bean's lifecyccle.
 
@@ -182,29 +182,12 @@ The [hotspot=fetchSystemLoadMethod file=0]`fetchSystemLoad()` method retrieves t
 
 The [hotspot=getSystemLoads file=0]`getSystemLoads()` method is a getter method for accessing the list of system load data from the Jakarta Faces page.
 
-Create the `SystemLoadData` class to represent each entry of system data.
-
-[role="code_command hotspot file=1", subs="quotes"]
-----
-#Create the SystemLoadData class.#
-`src/main/java/io/openliberty/guides/application/SystemLoadData.java`
-----
-
-// File 1
-SystemLoadData.java
-[source, java, linenums, role='code_column hide_tags=copyright']
-----
-include::finish/src/main/java/io/openliberty/guides/application/SystemLoadData.java[]
-----
-
-The [hotspot file=1]`SystemLoadData` class is a Plain Old Java Object (POJO) that represents a single system data entry. It contains the time, system load average, and memory usage data. The various methods within this class allow the viewing or editing the properties of each system in the system load bean.
-
 // =================================================================================================
 // Binding data to the UI with expression language
 // =================================================================================================
 == Binding data to the UI with expression language
 
-Now that you have the backend logic implemented with CDI, you'll update the Jakarta Faces page to display the dynamic system load data by binding the UI components to the backend data using Jakarta Expression Language.
+Now that you have the backend logic implemented with CDI, you'll update the Jakarta Faces page to display the dynamic system load data by binding the UI components to the backend data using Jakarta Expression Language (EL).
 
 [role="code_command hotspot file=0", subs="quotes"]
 ----
@@ -225,14 +208,13 @@ SystemLoadBean.java
 include::finish/src/main/java/io/openliberty/guides/application/SystemLoadBean.java[]
 ----
 
-The [hotspot file=0]`index.html` uses a [hotspot=commandButton file=0]`<h:commandButton>` tag to create the refresh button, where the action [hotspot=commandButtonAction file=0]`#{systemLoadBean.fetchSystemLoad}` invokes the [hotspot=fetchSystemLoadMethod file=1]`fetchSystemLoad()` method using Jakarta Expression Language (EL) when clicked. This EL expression references the [hotspot=namedAnnotation file=1]`systemLoadBean` managed bean, triggering the method to update the system load data. The [hotspot=ajaxTag file=0]`<f:ajax>` tag ensures that the [hotspot=systemLoadForm file=0]`systemLoadForm` component is re-rendered without a full page reload.
+The [hotspot file=0]`index.html` uses a [hotspot=commandButton file=0]`<h:commandButton>` tag to create the refresh button, where the action [hotspot=commandButtonAction file=0]`#{systemLoadBean.fetchSystemLoad}` invokes the [hotspot=fetchSystemLoadMethod file=1]`fetchSystemLoad()` method using Jakarta Expression Language when clicked. This EL expression references the [hotspot=namedAnnotation file=1]`systemLoadBean` managed bean, triggering the method to update the system load data. The [hotspot=ajaxTag file=0]`<f:ajax>` tag ensures that the [hotspot=systemLoadForm file=0]`systemLoadForm` component is re-rendered without a full page reload.
 
 The [hotspot=systemLoadsTable file=0]`systemLoadsTable` table is populated using the [hotspot=uiRepeat file=0]`<ui:repeat>` tag, which iterates over the list of system load data from the [hotspot=namedAnnotation file=1]`systemLoadBean`. The EL expression [hotspot=dataBind file=0]`#{systemLoadBean.systemLoads}` binds the data from the managed bean to the UI components, and initializes the `systemLoadBean` if it hasn't been created yet. For each entry, the `time`, `loadAverage`, and `memoryUsage` fields are displayed using [hotspot=outputText1 hotspot=outputText2 hotspot=outputText3 file=0]`<h:outputText>`, while [hotspot=convertNumber1 hotspot=convertNumber2 file=0]`<f:convertNumber>` formats numeric values to two decimal places.
 
 // =================================================================================================
 // Running the application
 // =================================================================================================
-
 == Running the application
 
 server.xml
@@ -248,6 +230,56 @@ Because you started the Open Liberty in dev mode at the beginning of the guide, 
 Navigate to the http://localhost:9080/index.xhtml to view your web application.
 
 Click on the refresh button to trigger an update on the system loads table.
+
+// =================================================================================================
+// Testing the application
+// =================================================================================================
+== Testing the application
+
+automated tests are a much better approach because they are more reliable and trigger a failure if a breaking change is introduced.
+
+While you can manually verify the web application by visiting http://localhost:9080/index.xhtml, automated tests are a much better approach because they are more reliable and trigger a failure if a breaking change is introduced. You can write unit tests for your CDI bean to ensure that the basic operations you implemented function correctly.
+
+[role="code_command hotspot file=0", subs="quotes"]
+----
+#Create the SystemLoadBeanTest class.#
+`src/test/java/io/openliberty/guides/application/SystemLoadBeanTest.java`
+----
+
+SystemLoadBeanTest.java
+[source, java, linenums, role='code_column hide_tags=copyright']
+----
+include::finish/src/test/java/io/openliberty/guides/application/SystemLoadBeanTest.java[]
+----
+
+The [hotspot=setUp file=0]`setUp()` method is annotated with [hotspot=BeforeEach file=0]`@BeforeEach`, indicating that it is run before each test case to ensure a clean state for each test execution. In this case, it creates a new instance of `SystemLoadBean` and manually calls the `init()` method to initialize the list of system load data before each test.
+
+The [hotspot=testInitMethod file=0]`testInitMethod()` test case verifies that after initializing `SystemLoadBean`, the list of system load data is not null and contains at least one entry.
+  
+The [hotspot=testFetchSystemLoad file=0]`testFetchSystemLoad()` test case verifies that after calling the `fetchSystemLoad()` method, the size of the list of system load data increases by one.
+
+The [hotspot=testDataIntegrity file=0]`testDataIntegrity()` test case verifies that each `SystemLoadData` entry in the list of system load data contains valid values for `time`, `loadAverage`, and `memoryUsage`.
+
+=== Running the tests
+
+Because you started Open Liberty in dev mode, you can run the tests by pressing the `enter/return` key from the command-line session where you started dev mode.
+
+You see the following output:
+
+[source, role='no_copy']
+----
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running io.openliberty.guides.application.SystemLoadBeanTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.037 s -- in io.openliberty.guides.application.SystemLoadBeanTest
+
+Results:
+
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+----
+
+When you are done checking out the service, exit dev mode by pressing `CTRL+C` in the command-line session where you ran Liberty.
 
 // =================================================================================================
 // Great work! You're done!

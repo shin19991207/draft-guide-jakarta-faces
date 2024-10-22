@@ -1,9 +1,16 @@
 <server description="Sample Liberty server">
 
     <featureManager>
-        <feature>faces-4.0</feature>
-        <feature>expressionLanguage-5.0</feature>
-        <feature>cdi-4.0</feature>
+        <platform>jakartaee-10.0</platform>
+        <!-- tag::faces[] -->
+        <feature>faces</feature>
+        <!-- end::faces[] -->
+        <!-- tag::expressionLanguage[] -->
+        <feature>expressionLanguage</feature>
+        <!-- end::expressionLanguage[] -->
+        <!-- tag::cdi[] -->
+        <feature>cdi</feature>
+        <!-- end::cdi[] -->
     </featureManager>
 
     <variable name="http.port" defaultValue="9080"/>

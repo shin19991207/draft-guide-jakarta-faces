@@ -1,3 +1,20 @@
+<!-- tag::copyright[] -->
+<!--
+  Copyright (c) 2024 IBM Corp.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!-- end::copyright[] -->
 <!DOCTYPE html>
 <!-- tag::xmlns[] -->
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -5,95 +22,92 @@
       xmlns:f="jakarta.faces.core"
       xmlns:ui="jakarta.faces.facelets">
 <!-- end::xmlns[] -->
+  <h:head>
+    <meta charset="UTF-8" />
+    <title>Open Liberty System Load</title>
+    <h:outputStylesheet library="css" name="styles.css" />
+    <link href="favicon.ico" rel="icon" />
+    <link href="favicon.ico" rel="shortcut icon" />
+  </h:head>
+  <h:body>
+    <section id="appIntro">
+      <div id="titleSection">
+        <h1 id="appTitle">Open Liberty System Load</h1>
+        <div class="line"></div>
+        <div class="headerImage"></div>
+      </div>
 
-    <h:head>
-        <meta charset="UTF-8" />
-        <title>Open Liberty System Load</title>
-        <h:outputStylesheet library="css" name="styles.css" />
-        <link href="favicon.ico" rel="icon" />
-        <link href="favicon.ico" rel="shortcut icon" />
-    </h:head>
-    <h:body>
-        <section id="appIntro">
-            <div id="titleSection">
-                <h1 id="appTitle">Open Liberty System Load</h1>
-                <div class="line"></div>
-                <div class="headerImage"></div>
+      <div class="msSection" id="systemLoads">
+        <!-- tag::systemLoadForm[] -->
+        <h:form id="systemLoadForm">
+          <div class="headerRow">
+            <div class="headerIcon">
+              <img src="#{resource['img/sysProps.svg']}" />
             </div>
-
-            <div class="msSection" id="systemLoads">
-                <!-- tag::systemLoadForm[] -->
-                <h:form id="systemLoadForm">
-                    <div class="headerRow">
-                        <div class="headerIcon">
-                            <img src="#{resource['img/sysProps.svg']}" />
-                        </div>
-                        <div class="headerTitleWithButton" id="sysPropTitle">
-                            <h2>System Loads</h2>
-                            <!-- tag::commandButton[] -->
-                            <!-- tag::commandButtonAction[] -->
-                            <h:commandButton id="refreshButton" value="" action="#{systemLoadBean.fetchSystemLoad}" styleClass="refreshButton">
-                            <!-- end::commandButtonAction[] -->
-                                <!-- tag::ajaxTag[] -->
-                                <f:ajax render="systemLoadForm" />
-                                <!-- end::ajaxTag[] -->
-                            </h:commandButton>
-                            <!-- end::commandButton[] -->
-                        </div>
-                    </div>
-
-                    <div class="sectionContent">
-                        <!-- tag::systemLoadsTable[] -->
-                        <table id="systemLoadsTable">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>System Load</th>
-                                    <th>Memory Usage (%)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="systemLoadsTableBody">
-                                <!-- Iterate over system loads from the backing bean -->
-                                <!-- tag::uiRepeat[] -->
-                                <!-- tag::dataBind[] -->
-                                <ui:repeat value="#{systemLoadBean.systemLoads}" var="data">
-                                <!-- end::dataBind[] -->
-                                    <tr>
-                                        <td>
-                                            <!-- tag::outputText1[] -->
-                                            <h:outputText value="#{data.time}" />
-                                            <!-- end::outputText1[] -->
-                                        </td>
-                                        <td>
-                                            <!-- tag::outputText2[] -->
-                                            <h:outputText value="#{data.loadAverage == null ? '-' : data.loadAverage}">
-                                                <!-- tag::convertNumber1[] -->
-                                                <f:convertNumber pattern="#0.00" />
-                                                <!-- end::convertNumber1[] -->
-                                            </h:outputText>
-                                            <!-- end::outputText2[] -->
-                                        </td>
-                                        <td>
-                                            <!-- tag::outputText3[] -->
-                                            <h:outputText value="#{data.memoryUsage == null ? '-' : data.memoryUsage}">
-                                                <!-- tag::convertNumber2[] -->
-                                                <f:convertNumber pattern="#0.00" />
-                                                <!-- end::convertNumber2[] -->
-                                            </h:outputText>
-                                            <!-- tag::outputText3[] -->
-                                        </td>
-                                    </tr>
-                                </ui:repeat>
-                                <!-- end::uiRepeat[] -->
-                            </tbody>
-                        </table>
-                        <!-- end::systemLoadsTable[] -->
-                    </div>
-                </h:form>
-                <!-- end::systemLoadForm[] -->
+            <div class="headerTitleWithButton" id="sysPropTitle">
+              <h2>System Loads</h2>
+              <!-- tag::commandButton[] -->
+              <!-- tag::commandButtonAction[] -->
+              <h:commandButton id="refreshButton" value="" action="#{systemLoadBean.fetchSystemLoad}" styleClass="refreshButton" title="Refresh system load data">
+              <!-- end::commandButtonAction[] -->
+                <!-- tag::ajaxTag[] -->
+                <f:ajax render="systemLoadForm" />
+                <!-- end::ajaxTag[] -->
+              </h:commandButton>
+              <!-- end::commandButton[] -->
             </div>
-        </section>
-        
-        <ui:include src="/WEB-INF/includes/footer.xhtml" />
-    </h:body>
+          </div>
+          <div class="sectionContent">
+            <!-- tag::systemLoadsTable[] -->
+            <table id="systemLoadsTable">
+              <thead>
+                <tr>
+                  <th>Time</th>
+                  <th>System Load</th>
+                  <th>Memory Usage (%)</th>
+                </tr>
+              </thead>
+              <tbody id="systemLoadsTableBody">
+                <!-- Iterate over system loads from the backing bean -->
+                <!-- tag::uiRepeat[] -->
+                <!-- tag::dataBind[] -->
+                <ui:repeat value="#{systemLoadBean.systemLoads}" var="data">
+                <!-- end::dataBind[] -->
+                  <tr>
+                    <td>
+                      <!-- tag::outputText1[] -->
+                      <h:outputText value="#{data.time}" />
+                      <!-- end::outputText1[] -->
+                    </td>
+                    <td>
+                      <!-- tag::outputText2[] -->
+                      <h:outputText value="#{data.loadAverage == null ? '-' : data.loadAverage}">
+                        <!-- tag::convertNumber1[] -->
+                        <f:convertNumber pattern="#0.00" />
+                        <!-- end::convertNumber1[] -->
+                      </h:outputText>
+                      <!-- end::outputText2[] -->
+                    </td>
+                    <td>
+                      <!-- tag::outputText3[] -->
+                      <h:outputText value="#{data.memoryUsage == null ? '-' : data.memoryUsage}">
+                        <!-- tag::convertNumber2[] -->
+                        <f:convertNumber pattern="#0.00" />
+                        <!-- end::convertNumber2[] -->
+                      </h:outputText>
+                      <!-- end::outputText3[] -->
+                    </td>
+                  </tr>
+                </ui:repeat>
+                <!-- end::uiRepeat[] -->
+              </tbody>
+            </table>
+            <!-- end::systemLoadsTable[] -->
+          </div>
+        </h:form>
+        <!-- end::systemLoadForm[] -->
+      </div>
+    </section>
+    <ui:include src="/WEB-INF/includes/footer.xhtml" />
+  </h:body>
 </html>
