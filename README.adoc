@@ -40,6 +40,8 @@ Jakarta Faces is a powerful framework for building web applications with reusabl
 
 The application you will build in this guide is a dynamic web application that displays system load data on demand. Using Jakarta Faces for the UI, you'll create a table to show the system's load and memory usage. You'll also learn how to use CDI to provide the system data from a managed bean, and to use Jakarta Expression Language to bind this data to the UI components.
 
+image::AKS_tool_create_resource_group.png[AKS tool create resource group,align="center"]
+
 // =================================================================================================
 // Getting started
 // =================================================================================================
