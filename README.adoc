@@ -65,7 +65,7 @@ After you see the following message, your Liberty instance is ready.
 The defaultServer server is ready to run a smarter planet.
 ----
 
-Check out the web application at http://localhost:9080/index.xhtml. You can click on the refresh button to update and display the latest system load data in the table.
+Check out the web application at http://localhost:9080/index.xhtml. You can click on the refresh button image:refresh.svg[refresh icon, 16, 16] to update and display the latest system load data in the table.
 
 After you are finished checking out the application, stop the Liberty instance by pressing `CTRL+C` in the command-line session where you ran Liberty. Alternatively, you can run the `liberty:stop` goal from the `finish` directory in another shell session:
 
@@ -210,7 +210,7 @@ include::finish/src/main/java/io/openliberty/guides/application/SystemLoadBean.j
 
 The [hotspot file=0]`index.html` uses a [hotspot=commandButton file=0]`<h:commandButton>` tag to create the refresh button, where the action [hotspot=commandButtonAction file=0]`#{systemLoadBean.fetchSystemLoad}` invokes the [hotspot=fetchSystemLoadMethod file=1]`fetchSystemLoad()` method using Jakarta Expression Language when clicked. This EL expression references the [hotspot=namedAnnotation file=1]`systemLoadBean` managed bean, triggering the method to update the system load data. The [hotspot=ajaxTag file=0]`<f:ajax>` tag ensures that the [hotspot=systemLoadForm file=0]`systemLoadForm` component is re-rendered without a full page reload.
 
-The [hotspot=systemLoadsTable file=0]`systemLoadsTable` table is populated using the [hotspot=uiRepeat file=0]`<ui:repeat>` tag, which iterates over the list of system load data from the [hotspot=namedAnnotation file=1]`systemLoadBean`. The EL expression [hotspot=dataBind file=0]`#{systemLoadBean.systemLoads}` binds the data from the managed bean to the UI components, and initializes the `systemLoadBean` if it hasn't been created yet. For each entry, the `time`, `loadAverage`, and `memoryUsage` fields are displayed using [hotspot=outputText1 hotspot=outputText2 hotspot=outputText3 file=0]`<h:outputText>`, while [hotspot=convertNumber1 hotspot=convertNumber2 file=0]`<f:convertNumber>` formats numeric values to two decimal places.
+The [hotspot=systemLoadsTable file=0]`systemLoadsTable` table is populated using the [hotspot=uiRepeat file=0]`<ui:repeat>` tag, which iterates over the list of system load data from the [hotspot=namedAnnotation file=1]`systemLoadBean`. The EL expression [hotspot=dataBind file=0]`#{systemLoadBean.systemLoads}` binds the data from the managed bean to the UI components, and initializes the `systemLoadBean` if it hasn't been created yet. For each entry, the `time`, `cpuLoad`, and `memoryUsage` fields are displayed using [hotspot=outputText1 hotspot=outputText2 hotspot=outputText3 file=0]`<h:outputText>`, while [hotspot=convertNumber1 hotspot=convertNumber2 file=0]`<f:convertNumber>` formats numeric values to two decimal places.
 
 // =================================================================================================
 // Running the application
@@ -256,7 +256,7 @@ The [hotspot=testInitMethod file=0]`testInitMethod()` test case verifies that af
   
 The [hotspot=testFetchSystemLoad file=0]`testFetchSystemLoad()` test case verifies that after calling the `fetchSystemLoad()` method, the size of the list of system load data increases by one.
 
-The [hotspot=testDataIntegrity file=0]`testDataIntegrity()` test case verifies that each `SystemLoadData` entry in the list of system load data contains valid values for `time`, `loadAverage`, and `memoryUsage`.
+The [hotspot=testDataIntegrity file=0]`testDataIntegrity()` test case verifies that each `SystemLoadData` entry in the list of system load data contains valid values for `time`, `cpuLoad`, and `memoryUsage`.
 
 === Running the tests
 
