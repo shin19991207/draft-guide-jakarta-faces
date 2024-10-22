@@ -40,8 +40,6 @@ Jakarta Faces is a powerful framework for building web applications with reusabl
 
 The application you will build in this guide is a dynamic web application that displays system load data on demand. Using Jakarta Faces for the UI, you'll create a table to show the system's load and memory usage. You'll also learn how to use CDI to provide the system data from a managed bean, and to use Jakarta Expression Language to bind this data to the UI components.
 
-image::AKS_tool_create_resource_group.png[AKS tool create resource group,align="center"]
-
 // =================================================================================================
 // Getting started
 // =================================================================================================
@@ -67,7 +65,7 @@ After you see the following message, your Liberty instance is ready.
 The defaultServer server is ready to run a smarter planet.
 ----
 
-Check out the web application at http://localhost:9080/index.xhtml. You can click on the refresh button image:refresh.svg[refresh icon, 16, 16] to update and display the latest system load data in the table.
+Check out the web application at http://localhost:9080/index.xhtml. You can click on the refresh button image:refresh.png[refresh icon, 16, 16] to update and display the latest system load data in the table.
 
 After you are finished checking out the application, stop the Liberty instance by pressing `CTRL+C` in the command-line session where you ran Liberty. Alternatively, you can run the `liberty:stop` goal from the `finish` directory in another shell session:
 
