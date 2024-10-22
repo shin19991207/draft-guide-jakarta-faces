@@ -13,12 +13,12 @@ package io.openliberty.guides.application.model;
 
 public class SystemLoadData {
     private String time;
-    private Double loadAverage;
+    private Double cpuLoad;
     private Double memoryUsage;
 
-    public SystemLoadData(String time, Double loadAverage, Double memoryUsage) {
+    public SystemLoadData(String time, Double cpuLoad, Double memoryUsage) {
         this.time = time;
-        this.loadAverage = loadAverage;
+        this.cpuLoad = cpuLoad;
         this.memoryUsage = memoryUsage;
     }
 
@@ -26,8 +26,8 @@ public class SystemLoadData {
         return time;
     }
 
-    public Double getLoadAverage() {
-        return loadAverage;
+    public Double getCpuLoad() {
+        return cpuLoad;
     }
 
     public Double getMemoryUsage() {

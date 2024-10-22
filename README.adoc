@@ -38,7 +38,7 @@ You'll learn how to build a dynamic web application using Jakarta Faces for the 
 
 Jakarta Faces is a powerful framework for building web applications with reusable UI components. It provides an API for managing component state, handling events, server-side validation, page navigation, and supports internationalization. The framework also offers tag libraries for adding components and binding them to server-side objects, simplifying UI development. Jakarta Contexts and Dependency Injection (CDI) provides a flexible way to manage the lifecycle of backend beans, allowing managed beans to be automatically created and injected when needed. Jakarta Expression Language (EL) allows data binding between the UI and the backend, enabling componenets to display dynamic data and respond to user actions.
 
-The application you will build in this guide is a dynamic web application that displays system load data on demand. Using Jakarta Faces for the UI, you'll create a table to show the system's load and memory usage. You'll also learn how to use CDI to provide the system data from a managed bean, and to use Jakarta Expression Language to bind this data to the UI components.
+The application you will build in this guide is a dynamic web application that displays system load data on demand. Using Jakarta Faces for the UI, you'll create a table to show the system's cpu load and heap memory usage. You'll also learn how to use CDI to provide the system load data from a managed bean, and to use Jakarta Expression Language to bind this data to the UI components.
 
 // =================================================================================================
 // Getting started
@@ -149,18 +149,18 @@ The [hotspot=servlet-mapping file=0]`<servlet-mapping>` element specifies which 
 
 By configuring both the servlet and the servlet mapping, you're ensuring that Jakarta Faces pages are properly processed and delivered in response to user requests.
 
-The [hotspot=project-stage file=0]`jakarta.faces.PROJECT_STAGE` context parameter determines the current stage of the application in its development lifecycle. When set to [hotspot=project-stage-dev file=0]`Development`, Jakarta Faces provides additional debugging information and developer-friendly error messages.
+The [hotspot=project-stage file=0]`jakarta.faces.PROJECT_STAGE` context parameter determines the current stage of the application in its development lifecycle. Since it is currently set to [hotspot=project-stage-dev file=0]`Development`, you will see additional debugging information, including developer-friendly warning messages such as `WARNING: Apache MyFaces Core is running in DEVELOPMENT mode.` For more information about valid values and how to set the `PROJECT_STAGE` parameter, you can refer to the official https://jakarta.ee/specifications/faces/4.0/apidocs/jakarta/faces/application/ProjectStage[Jakarta Faces ProjectStage documentation^].
 
 Because you are running Open Liberty in dev mode and have configured the Faces Servlet, all the changes were automatically picked up. 
 
-Check out the application that you created at http://localhost:9080/index.xhtml. You should see the static page with the system loads table displaying only the headers and no data.
+Check out the web application that you created at http://localhost:9080/index.xhtml. You should see the static page with the system loads table displaying only the headers and no data.
 
 // =================================================================================================
 // Implementing backend logic with dependency injection
 // =================================================================================================
 == Implementing backend logic with dependency injection
 
-To provide system data to your application, you'll create a CDI-managed bean that retrieves system load and memory usage information. This bean will be accessible from the Jakarta Faces page and provide the data to display.
+To provide system load data to your web application, you'll create a CDI-managed bean that retrieves information about the system's CPU load and memory usage. This bean will be accessible from the Jakarta Faces page and will supply the data to be displayed.
 
 [role="code_command hotspot file=0", subs="quotes"]
 ----
@@ -210,7 +210,7 @@ include::finish/src/main/java/io/openliberty/guides/application/SystemLoadBean.j
 
 The [hotspot file=0]`index.html` uses a [hotspot=commandButton file=0]`<h:commandButton>` tag to create the refresh button, where the action [hotspot=commandButtonAction file=0]`#{systemLoadBean.fetchSystemLoad}` invokes the [hotspot=fetchSystemLoadMethod file=1]`fetchSystemLoad()` method using Jakarta Expression Language when clicked. This EL expression references the [hotspot=namedAnnotation file=1]`systemLoadBean` managed bean, triggering the method to update the system load data. The [hotspot=ajaxTag file=0]`<f:ajax>` tag ensures that the [hotspot=systemLoadForm file=0]`systemLoadForm` component is re-rendered without a full page reload.
 
-The [hotspot=systemLoadsTable file=0]`systemLoadsTable` table is populated using the [hotspot=uiRepeat file=0]`<ui:repeat>` tag, which iterates over the list of system load data from the [hotspot=namedAnnotation file=1]`systemLoadBean`. The EL expression [hotspot=dataBind file=0]`#{systemLoadBean.systemLoads}` binds the data from the managed bean to the UI components, and initializes the `systemLoadBean` if it hasn't been created yet. For each entry, the `time`, `cpuLoad`, and `memoryUsage` fields are displayed using [hotspot=outputText1 hotspot=outputText2 hotspot=outputText3 file=0]`<h:outputText>`, while [hotspot=convertNumber1 hotspot=convertNumber2 file=0]`<f:convertNumber>` formats numeric values to two decimal places.
+The [hotspot=systemLoadsTable file=0]`systemLoadsTable` is populated using the [hotspot=uiRepeat file=0]`<ui:repeat>` tag, which iterates over the list of system load data provided by the [hotspot=namedAnnotation file=1]`systemLoadBean`. The EL expression [hotspot=dataBind file=0]`#{systemLoadBean.systemLoads}` calls the [hotspot=getSystemLoads file=1]`getSystemLoads()` method from the managed bean, binding the data to the UI components. If the `systemLoadBean` hasn't been created yet, it is automatically initialized at this point. For each entry, the `time`, `cpuLoad`, and `memoryUsage` fields are displayed using [hotspot=outputText1 hotspot=outputText2 hotspot=outputText3 file=0]`<h:outputText>`, while [hotspot=convertNumber1 hotspot=convertNumber2 file=0]`<f:convertNumber>` formats numeric values to two decimal places.
 
 // =================================================================================================
 // Running the application
@@ -227,9 +227,7 @@ The required [hotspot=faces file=0]`faces`, [hotspot=expressionLanguage file=0]`
 
 Because you started the Open Liberty in dev mode at the beginning of the guide, so all the changes were automatically picked up.
 
-Navigate to the http://localhost:9080/index.xhtml to view your web application.
-
-Click on the refresh button to trigger an update on the system loads table.
+Navigate to the http://localhost:9080/index.xhtml to view your web application. Click on the image:refresh.png[refresh icon, 20, 20] refresh button to trigger an update on the system loads table.
 
 // =================================================================================================
 // Testing the application

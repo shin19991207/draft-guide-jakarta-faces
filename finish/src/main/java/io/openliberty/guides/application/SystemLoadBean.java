@@ -13,7 +13,7 @@ package io.openliberty.guides.application;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
-import java.lang.management.OperatingSystemMXBean;
+import com.sun.management.OperatingSystemMXBean;
 import java.util.Calendar;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class SystemLoadBean implements Serializable {
     private List<SystemLoadData> systemLoads;
 
     private static final OperatingSystemMXBean OS =
-        ManagementFactory.getOperatingSystemMXBean();
+        (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
     private static final MemoryMXBean MEM =
         ManagementFactory.getMemoryMXBean();
@@ -55,17 +55,17 @@ public class SystemLoadBean implements Serializable {
     // tag::fetchSystemLoadMethod[]
     public void fetchSystemLoad() {
         String time = Calendar.getInstance().getTime().toString();
-
-        double loadAverage = OS.getSystemLoadAverage();
-
+    
+        double cpuLoad = OS.getCpuLoad() * 100;
+    
         long heapMax = MEM.getHeapMemoryUsage().getMax();
         long heapUsed = MEM.getHeapMemoryUsage().getUsed();
         double memoryUsage = heapUsed * 100.0 / heapMax;
-
-        SystemLoadData data = new SystemLoadData(time, loadAverage, memoryUsage);
-
+    
+        SystemLoadData data = new SystemLoadData(time, cpuLoad, memoryUsage);
+    
         systemLoads.add(data);
-    }
+    }    
     // end::fetchSystemLoadMethod[]
 
     // tag::getSystemLoads[]

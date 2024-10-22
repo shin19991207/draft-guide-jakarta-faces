@@ -24,7 +24,7 @@
 <!-- end::xmlns[] -->
   <h:head>
     <meta charset="UTF-8" />
-    <title>Open Liberty System Load</title>
+    <title>Open Liberty - Jakarta Faces Example</title>
     <h:outputStylesheet library="css" name="styles.css" />
     <link href="favicon.ico" rel="icon" />
     <link href="favicon.ico" rel="shortcut icon" />
@@ -32,7 +32,7 @@
   <h:body>
     <section id="appIntro">
       <div id="titleSection">
-        <h1 id="appTitle">Open Liberty System Load</h1>
+        <h1 id="appTitle">Jakarta Faces Example</h1>
         <div class="line"></div>
         <div class="headerImage"></div>
       </div>
@@ -63,25 +63,24 @@
               <thead>
                 <tr>
                   <th>Time</th>
-                  <th>System Load</th>
-                  <th>Memory Usage (%)</th>
+                  <th>CPU Load (%)</th>
+                  <th>Heap Memory Usage (%)</th>
                 </tr>
               </thead>
               <tbody id="systemLoadsTableBody">
-                <!-- Iterate over system loads from the backing bean -->
                 <!-- tag::uiRepeat[] -->
                 <!-- tag::dataBind[] -->
-                <ui:repeat value="#{systemLoadBean.systemLoads}" var="data">
+                <ui:repeat value="#{systemLoadBean.systemLoads}" var="systemLoadData">
                 <!-- end::dataBind[] -->
                   <tr>
                     <td>
                       <!-- tag::outputText1[] -->
-                      <h:outputText value="#{data.time}" />
+                      <h:outputText value="#{systemLoadData.time}" />
                       <!-- end::outputText1[] -->
                     </td>
                     <td>
                       <!-- tag::outputText2[] -->
-                      <h:outputText value="#{data.loadAverage == null ? '-' : data.loadAverage}">
+                      <h:outputText value="#{systemLoadData.cpuLoad == null ? '-' : systemLoadData.cpuLoad}">
                         <!-- tag::convertNumber1[] -->
                         <f:convertNumber pattern="#0.00" />
                         <!-- end::convertNumber1[] -->
@@ -90,7 +89,7 @@
                     </td>
                     <td>
                       <!-- tag::outputText3[] -->
-                      <h:outputText value="#{data.memoryUsage == null ? '-' : data.memoryUsage}">
+                      <h:outputText value="#{systemLoadData.memoryUsage == null ? '-' : systemLoadData.memoryUsage}">
                         <!-- tag::convertNumber2[] -->
                         <f:convertNumber pattern="#0.00" />
                         <!-- end::convertNumber2[] -->
